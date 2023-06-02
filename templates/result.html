@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Výsledky tankovania</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding-top: 50px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px 0 rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #007bff;
+            text-shadow: 2px 2px #e9e9e9;
+        }
+        .table {
+            margin-top: 25px;
+        }
+        .btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+        .btn-success:hover {
+            background-color: #218838;
+            border-color: #218838;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .btn-primary:hover {
+            background-color: #0062cc;
+            border-color: #0062cc;
+        }
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+        .btn-danger:hover {
+            background-color: #c82333;
+            border-color: #c82333;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .my-3 {
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+        th {
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px;
+        }
+        td {
+            font-size: 14px;
+            padding: 10px;
+        }
+        .table-responsive {
+            overflow-x: auto;
+        }
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: #f9f9f9;
+        }
+        .table-bordered {
+            border: 1px solid #dee2e6;
+        }
+        .table-bordered th,
+        .table-bordered td {
+            border: 1px solid #dee2e6;
+        }
+        .table-hover tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+        .form-check-label {
+            font-size: 13px;
+            margin-bottom: 0;
+        }
+        .form-check-input {
+            margin-top: 5px;
+        }
+        .btn-group-toggle .btn input[type="checkbox"] {
+            position: absolute;
+            clip: rect(0, 0, 0, 0);
+            pointer-events: none;
+        }
+        .btn-group-toggle .btn.active {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .btn-group-toggle .btn.active:hover {
+            background-color: #0062cc;
+            border-color: #0062cc;
+        }
+        .btn-group-toggle .btn.active:focus {
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .btn-group-toggle .btn:first-child:not(:last-child) {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        .btn-group-toggle .btn:last-child:not(:first-child) {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+        .btn-group-toggle .btn:not(:first-child):not(:last-child) {
+            border-radius: 0;
+        }
+        .btn-download {
+            margin-top: 20px;
+        }
+        .btn-download:hover {
+            background-color: #218838;
+            border-color: #218838;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#select-all').click(function() {
+                $('input[type="checkbox"]').prop('checked', this.checked);
+            });
+
+            $('input[type="checkbox"]').click(function() {
+                if ($('input[type="checkbox"]:checked').length == $('input[type="checkbox"]').length) {
+                    $('#select-all').prop('checked', true);
+                } else {
+                    $('#select-all').prop('checked', false);
+                }
+            });
+
+            $('#export-selected').click(function() {
+                var selectedRecords = [];
+                $('input[name="selected_records"]:checked').each(function() {
+                    selectedRecords.push($(this).val());
+                });
+                if (selectedRecords.length > 0) {
+                    window.location.href = '{{ url_for('download_selected') }}?ids=' + selectedRecords.join(',');
+                } else {
+                    alert('Neboli vybrané žiadne záznamy na export.');
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1 class="my-4">Všetky záznamy o tankovaní</h1>
+        <div class="text-center my-3">
+            <a href="{{ url_for('download') }}" class="btn btn-success btn-download">Stiahnuť XLSX</a>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col"><input type="checkbox" id="select-all"></th>
+                        <th scope="col">Dátum</th>
+                        <th scope="col">Litre</th>
+                        <th scope="col">Cena za 1L</th>
+                        <th scope="col">Typ jazdy</th>
+                        <th scope="col">Zaplatená suma</th>
+                        <th scope="col">Celková cena</th>
+                        <th scope="col">Cena na osobu</th>
+                        <th scope="col">Akcie</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in data %}
+                    <tr>
+                        <td><input type="checkbox" name="selected_records" value="{{ item.id }}"></td>
+                        <td>{{ item.datum }}</td>
+                        <td>{{ item.litre }}</td>
+                        <td>{{ '%.2f €'|format(item.cena_za_1l) }}</td>
+                        <td>{{ item.typ_jazdy }}</td>
+                        <td>{{ '%.2f €'|format(item.zaplatena_suma) }}</td>
+                        <td>
+                            {% if item.typ_jazdy != 'súkromná' %}
+                                {{ '%.2f €'|format(item.celkova_cena) }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if item.typ_jazdy != 'súkromná' %}
+                                {{ '%.2f €'|format(item.cena_na_osobu) }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{{ url_for('delete', id=item.id) }}" class="btn btn-danger btn-sm">Odstrániť</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="text-center my-3">
+            <button id="export-selected" class="btn btn-primary">Exportovať vybrané</button>
+        </div>
+    </div>
+</body>
+</html>

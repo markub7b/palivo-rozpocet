@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Tankovanie - Záznam</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #f2f2f2;
+            border-radius: 8px;
+            box-shadow: 0 0 20px 0 rgba(0,0,0,0.2);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #007bff;
+        }
+        .form-group {
+            margin-bottom: 25px;
+        }
+        .form-group label {
+            font-weight: bold;
+            color: #333;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .form-control {
+            border-radius: 4px;
+            padding: 12px;
+            font-size: 16px;
+            border: none;
+            background-color: #fff;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+            width: 100%;
+        }
+        .form-control:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+        .form-check label {
+            font-weight: normal;
+            color: #333;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+        .success-message {
+            color: green;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .error-message {
+            color: red;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .custom-form {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 0 20px 0 rgba(0,0,0,0.2);
+        }
+        .form-title {
+            text-align: center;
+            color: #007bff;
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="custom-form">
+            <h1 class="form-title">Záznam o tankovaní</h1>
+            <form method="POST">
+                <div class="form-group">
+                    <label for="datum">Dátum:</label>
+                    <input type="date" id="datum" name="datum" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="litre">Litre:</label>
+                    <input type="number" id="litre" name="litre" step="any" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="cena_za_1l">Cena za 1L:</label>
+                    <input type="number" id="cena_za_1l" name="cena_za_1l" step="any" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="typ_jazdy">Typ jazdy:</label><br>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" id="sukromna" name="typ_jazdy" value="sukromna" required>
+                        <label class="form-check-label" for="sukromna">Súkromná jazda</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" id="pracovna" name="typ_jazdy" value="pracovna">
+                        <label class="form-check-label" for="pracovna">Pracovná jazda</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="zaplatena_suma">Zaplatená suma:</label>
+                    <input type="number" id="zaplatena_suma" name="zaplatena_suma" step="any" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Pridaj záznam</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
